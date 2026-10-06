@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="sv">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopFront - merch och tillbehör</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="app.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopFront - merch och tillbehör</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 </head>
+
 <body>
-    <header class="site-header">
+  <header class="site-header">
     <h1>ShopFront</h1>
     <nav aria-label="Huvudmeny">
       <ul>
@@ -17,50 +19,37 @@
       </ul>
     </nav>
   </header>
-   <main>
+  <main>
     <section id="products-section" aria-labelledby="products-heading">
-  <h2 id="products-heading">Produkter</h2>
+      <h2 id="products-heading">Produkter</h2>
 
-  <div class="filter">
-    <label for="category-filter">Visa kategori</label>
-    <select id="category-filter">
-      <option value="alla">Alla produkter</option>
-      <option value="klader">Kläder</option>
-      <option value="accessoarer">Accessoarer</option>
-      <option value="hem">Hem</option>
-    </select>
-  </div>
-  <div id="product-list" class="product-grid">
+      <div class="filter">
+        <label for="category-filter">Visa kategori</label>
+        <select id="category-filter">
+          <option value="alla">Alla produkter</option>
+          <option value="klader">Kläder</option>
+          <option value="accessoarer">Accessoarer</option>
+          <option value="hem">Hem</option>
+        </select>
+      </div>
 
-  <article class="product-card" data-id="1">
-    <img src="images/t-shirt.jpg" alt="Vit t-shirt på galge">
-    <h3>T-shirt</h3>
-    <p class="price">199 kr</p>
-    <button type="button" class="add-btn">Lägg i korgen</button>
-  </article>
+      <div id="product-list" class="product-grid"></div>
 
-  <article class="product-card" data-id="2">
-    <img  src="images/mugg.jpg" alt="Två vita keramikmuggar mot grå bakgrund">
-    <h3>Mugg</h3>
-    <p class="price">99 kr</p>
-    <button type="button" class="add-btn">Lägg i korgen</button>
-  </article>
+    </section>
+    <section id="cart-section" aria-labelledby="cart-heading">
+      <h2 id="cart-heading">Varukorg</h2>
 
-</div>
-</section>
-<section id="cart-section" aria-labelledby="cart-heading">
-  <h2 id="cart-heading">Varukorg</h2>
+      <div id="cart-items">
+        <p class="empty-message">Korgen är tom</p>
+      </div>
 
-  <div id="cart-items">
-    <p class="empty-message">Korgen är tom</p>
-  </div>
+      <p class="cart-total-row">Totalt: <strong><span id="cart-total">0</span> kr</strong></p>
+    </section>
 
-  <p class="cart-total-row">Totalt: <strong><span id="cart-total">0</span> kr</strong></p>
-</section>
-
-   </main>
-    <footer class="site-footer">
-  <p>ShopFront – ett skolprojekt, ingen riktig betalning sker.</p>
-</footer>
+  </main>
+  <footer class="site-footer">
+    <p>ShopFront – ett skolprojekt, ingen riktig betalning sker.</p>
+  </footer>
 </body>
+
 </html>
