@@ -1,7 +1,7 @@
 const products = [
-    { id: 1, name: 'T-shirt', price: 199, category: 'klader', image: 'https://placehold.co/400x300?text=T-shirt', alt: 'Svart t-shirt med ShopFront-logga på bröstet' },
-    { id: 2, name: 'Mugg', price: 99, category: 'hem', image: 'https://placehold.co/400x300?text=Mugg', alt: 'Vit keramikmugg med ShopFront-logga' },
-    { id: 3, name: 'Nyckelring', price: 50, category: 'accessoarer', image: 'https://placehold.co/400x300?text=Nyckelring', alt: 'Silver nyckelring med ShopFront-logga' }
+    { id: 1, name: 'T-shirt', price: 199, category: 'klader', image: 'images/t-shirt.jpg', alt: 'vit t-shirt med ShopFront-logga på bröstet' },
+    { id: 2, name: 'Mugg', price: 99, category: 'hem', image: 'images/mugg.jpg', alt: 'Vit keramikmugg med ShopFront-logga' },
+    { id: 3, name: 'Nyckelring', price: 50, category: 'accessoarer', image: 'images/nyckelring.jpg', alt: 'knipa med metalnycklar på ring  med ShopFront-logga' }
 
 ];
 
@@ -30,4 +30,4 @@ function filterProducts() {
 }
 
 categoryFilter.addEventListener('change', filterProducts);
-showProducts(products);
+showProducts(products);   
