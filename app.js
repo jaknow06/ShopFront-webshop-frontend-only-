@@ -43,8 +43,23 @@ function filterProducts() {
 
 function loadCart() {
     try {
-        return JSON.parse(localStorage.getItem(CART_KEY)).filter(item =>
-            getProduct(item.id) && Number.isInteger(item.quantity) && item.quantity > 0
+        const savedCart = localStorage.getItem(CART_KEY);
+
+        if (!savedCart) {
+            return [];
+        }
+
+        const parsedCart = JSON.parse(savedCart);
+
+        if (!Array.isArray(parsedCart)) {
+            return [];
+        }
+
+        return parsedCart.filter(item =>
+            item &&
+            getProduct(item.id) &&
+            Number.isInteger(item.quantity) &&
+            item.quantity > 0
         );
     } catch {
         return [];
