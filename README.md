@@ -10,7 +10,8 @@ Ladda ner eller klona repot från github
 
 ## Agil work reflection
 
-- Hur delade ni upp arbetet?
+- Hur delade ni upp arbetet
+  
 När vi började med projektet valde vi att fördela uppgifterna utifrån varadras styrkor för att arbeta så agilt och effektivt som möjligt. Maryam tog helhetsansvaret för grundstrukturen och det visuella gemom att bygga det mesta av allt HTML och CSS, vilket gav hemsidan ett snyggt modernt och genomarbetat utseende. Samtidigt fokuserade Jonas och Jakub primärt på att bygga upp logiken och interaktiviteten med JavaScript, men de ändrade även mindre delar av css och html för att säkerställa att desognen fungerade smidigt i praktiken.
 
 * Vad prioriterade ni i backlog?
