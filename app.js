@@ -21,130 +21,86 @@ const CART_KEY = 'shopfront-cart';
 const getProduct = id => products.find(p => p.id === id);
 
 function showProducts(list) {
-    if (list.length === 0) {
-        productList.innerHTML = '<p class="empty-message">Inga produkter i den här kategorin.</p>';
-        return;
-    }
-
-    productList.innerHTML = list.map(product => `
-        <article class="product-card" data-id="${product.id}">
-            <img src="${product.image}" alt="${product.alt}">
-            <h3>${product.name}</h3>
-            <p class="price">${product.price} kr</p>
-            <button type="button" class="add-btn">Lägg i korgen</button>
-        </article>
-    `).join('');
-}
-
-function filterProducts() {
-    const category = categoryFilter.value;
-    showProducts(category === 'alla' ? products : products.filter(p => p.category === category));
+    productList.innerHTML = list.length
+        ? list.map(p => `
+            <article class="product-card" data-id="${p.id}">
+                <img src="${p.image}" alt="${p.alt}">
+                <h3>${p.name}</h3>
+                <p class="price">${p.price} kr</p>
+                <button type="button" class="add-btn">Lägg i korgen</button>
+            </article>`).join('')
+        : '<p class="empty-message">Inga produkter i den här kategorin.</p>';
 }
 
 function loadCart() {
     try {
-        const savedCart = localStorage.getItem(CART_KEY);
-
-        if (!savedCart) {
-            return [];
-        }
-
-        const parsedCart = JSON.parse(savedCart);
-
-        if (!Array.isArray(parsedCart)) {
-            return [];
-        }
-
-        return parsedCart.filter(item =>
-            item &&
-            getProduct(item.id) &&
-            Number.isInteger(item.quantity) &&
-            item.quantity > 0
-        );
+        const saved = JSON.parse(localStorage.getItem(CART_KEY));
+        return Array.isArray(saved)
+            ? saved.filter(i => i && getProduct(i.id) && Number.isInteger(i.quantity) && i.quantity > 0)
+            : [];
     } catch {
         return [];
     }
 }
 
-function saveCart() {
-    try {
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    } catch {}
-}
-
 let cart = loadCart();
 
+function setCart(newCart) {
+    cart = newCart.filter(i => i.quantity > 0);
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch {}
+    renderCart();
+}
+
 function changeQuantity(id, delta) {
-    const item = cart.find(i => i.id === id);
-    if (item) {
-        item.quantity += delta;
-    } else if (delta > 0) {
-        cart.push({ id, quantity: delta });
-    }
-    cart = cart.filter(i => i.quantity > 0);
-    renderCart();
-}
-
-function removeItem(id) {
-    cart = cart.filter(i => i.id !== id);
-    renderCart();
-}
-
-function clearCart() {
-    cart = [];
-    renderCart();
+    const exists = cart.some(i => i.id === id);
+    setCart(exists
+        ? cart.map(i => i.id === id ? { ...i, quantity: i.quantity + delta } : i)
+        : [...cart, { id, quantity: delta }]);
 }
 
 function renderCart() {
-    saveCart();
-    clearBtn.disabled = cart.length === 0;
+    clearBtn.disabled = !cart.length;
 
-    if (cart.length === 0) {
-        cartItems.innerHTML = '<p class="empty-message">Korgen är tom</p>';
-        cartTotal.textContent = '0';
-        return;
-    }
+    cartItems.innerHTML = cart.length
+        ? cart.map(({ id, quantity }) => {
+            const { name, price } = getProduct(id);
+            return `
+                <div class="cart-row" data-id="${id}">
+                    <span>${name} x ${quantity}</span>
+                    <span>${price * quantity} kr</span>
+                    <div class="cart-buttons">
+                        <button type="button" class="decrease-btn" aria-label="Minska antal ${name}">−</button>
+                        <button type="button" class="increase-btn" aria-label="Öka antal ${name}">+</button>
+                        <button type="button" class="remove-btn" aria-label="Ta bort ${name}">Ta bort</button>
+                    </div>
+                </div>`;
+        }).join('')
+        : '<p class="empty-message">Korgen är tom</p>';
 
-    let total = 0;
-
-    cartItems.innerHTML = cart.map(item => {
-        const product = getProduct(item.id);
-        const subtotal = product.price * item.quantity;
-        total += subtotal;
-        return `
-            <div class="cart-row" data-id="${item.id}">
-                <span>${product.name} × ${item.quantity}</span>
-                <span>${subtotal} kr</span>
-                <div class="cart-buttons">
-                    <button type="button" class="decrease-btn" aria-label="Minska antal ${product.name}">−</button>
-                    <button type="button" class="increase-btn" aria-label="Öka antal ${product.name}">+</button>
-                    <button type="button" class="remove-btn" aria-label="Ta bort ${product.name}">Ta bort</button>
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    cartTotal.textContent = total;
+    cartTotal.textContent = cart.reduce((sum, i) => sum + getProduct(i.id).price * i.quantity, 0);
 }
 
-categoryFilter.addEventListener('change', filterProducts);
-
-productList.addEventListener('click', event => {
-    const button = event.target.closest('.add-btn');
-    if (button) changeQuantity(Number(button.closest('.product-card').dataset.id), 1);
+categoryFilter.addEventListener('change', () => {
+    const cat = categoryFilter.value;
+    showProducts(cat === 'alla' ? products : products.filter(p => p.category === cat));
 });
 
-cartItems.addEventListener('click', event => {
-    const row = event.target.closest('.cart-row');
+productList.addEventListener('click', e => {
+    const btn = e.target.closest('.add-btn');
+    if (btn) changeQuantity(Number(btn.closest('.product-card').dataset.id), 1);
+});
+
+cartItems.addEventListener('click', e => {
+    const row = e.target.closest('.cart-row');
     if (!row) return;
     const id = Number(row.dataset.id);
 
-    if (event.target.closest('.increase-btn')) changeQuantity(id, 1);
-    else if (event.target.closest('.decrease-btn')) changeQuantity(id, -1);
-    else if (event.target.closest('.remove-btn')) removeItem(id);
+    if (e.target.closest('.increase-btn')) changeQuantity(id, 1);
+    else if (e.target.closest('.decrease-btn')) changeQuantity(id, -1);
+    else if (e.target.closest('.remove-btn')) setCart(cart.filter(i => i.id !== id));
 });
 
-clearBtn.addEventListener('click', clearCart);
+clearBtn.addEventListener('click', () => setCart([]));
 
 showProducts(products);
 renderCart();
