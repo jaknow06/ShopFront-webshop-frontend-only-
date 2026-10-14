@@ -1,22 +1,16 @@
 # ShopFront-webshop-frontend-only-
-A simple webshop built with HTML, CSS and JavaScript as part of our web development studies.
+En simpel nätbutik byggd med HTML, CSS och JavaScript där all logik sker i webbläsaren – ingen betalning eller server.
 
 ## Group members
 - Maryam, Jonas, Jakub
 
 ## How to run
-Clone the repository
-Open 'index.html' in your browser
+Ladda ner eller klona repot från github
+Öppna "index.html" direkt i webbläsaren, eller starta med Live Server i VS Code (högerklicka på "index.html" Open with Live Server).
 
 ## Agil work reflection
-- Hur delade ni upp arbetet?
-Vi delade upp arbetet mellan gruppmedlemmarna. 
-Maryam: ansvarade främst för HTML och CSS, inklusive sidans struktur, produktkort och bilder. 
-
-Jonas:
-Jakub:
-
-
+- Hur delade ni upp arbetet  
+När vi började med projektet valde vi att fördela uppgifterna utifrån varadras styrkor för att arbeta så agilt och effektivt som möjligt. Maryam tog helhetsansvaret för grundstrukturen och det visuella gemom att bygga det mesta av allt HTML och CSS, vilket gav hemsidan ett snyggt modernt och genomarbetat utseende. Samtidigt fokuserade Jonas och Jakub primärt på att bygga upp logiken och interaktiviteten med JavaScript, men de ändrade även mindre delar av css och html för att säkerställa att desognen fungerade smidigt i praktiken.
 
 - Vad prioriterade ni i backlog?
 Vi prioriterade att få sidans grundstruktur och produktlista att fungera, och sedan arbetade vi med design, produktbilder och responsiv layout.
