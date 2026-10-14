@@ -16,6 +16,7 @@ const categoryFilter = document.querySelector('#category-filter');
 const cartItems = document.querySelector('#cart-items');
 const cartTotal = document.querySelector('#cart-total');
 const clearBtn = document.querySelector('#clear-btn');
+const cartNavTotal = document.querySelector('#cart-nav-total');
 
 const CART_KEY = 'shopfront-cart';
 const getProduct = id => products.find(p => p.id === id);
@@ -34,10 +35,7 @@ function showProducts(list) {
 
 function loadCart() {
     try {
-        const saved = JSON.parse(localStorage.getItem(CART_KEY));
-        return Array.isArray(saved)
-            ? saved.filter(i => i && getProduct(i.id) && Number.isInteger(i.quantity) && i.quantity > 0)
-            : [];
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
     } catch {
         return [];
     }
@@ -47,15 +45,15 @@ let cart = loadCart();
 
 function setCart(newCart) {
     cart = newCart.filter(i => i.quantity > 0);
-    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch {}
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch { }
     renderCart();
 }
 
 function changeQuantity(id, delta) {
-    const exists = cart.some(i => i.id === id);
-    setCart(exists
-        ? cart.map(i => i.id === id ? { ...i, quantity: i.quantity + delta } : i)
-        : [...cart, { id, quantity: delta }]);
+    const item = cart.find(i => i.id === id);
+    if (item) item.quantity += delta;
+    else cart.push({ id, quantity: delta });
+    setCart(cart);
 }
 
 function renderCart() {
@@ -66,8 +64,8 @@ function renderCart() {
             const { name, price } = getProduct(id);
             return `
                 <div class="cart-row" data-id="${id}">
-                    <span>${name} x ${quantity}</span>
-                    <span>${price * quantity} kr</span>
+                    <span class="cart-name">${name} x ${quantity}</span>
+                    <span class="cart-sum">${price * quantity} kr</span>
                     <div class="cart-buttons">
                         <button type="button" class="decrease-btn" aria-label="Minska antal ${name}">−</button>
                         <button type="button" class="increase-btn" aria-label="Öka antal ${name}">+</button>
@@ -77,7 +75,9 @@ function renderCart() {
         }).join('')
         : '<p class="empty-message">Korgen är tom</p>';
 
-    cartTotal.textContent = cart.reduce((sum, i) => sum + getProduct(i.id).price * i.quantity, 0);
+    const total = cart.reduce((sum, i) => sum + getProduct(i.id).price * i.quantity, 0);
+    cartTotal.textContent = total;
+    cartNavTotal.textContent = total;
 }
 
 categoryFilter.addEventListener('change', () => {
